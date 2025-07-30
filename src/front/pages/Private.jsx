@@ -12,15 +12,18 @@ export const Private = () => {
     fetch(import.meta.env.VITE_BACKEND_URL + "/api/private", {
       headers: { Authorization: `Bearer ${token}` }
     })
-      .then(res => res.ok ? res.json() : Promise.reject("Invalid Token"))
+      .then(res => {
+        if (!res.ok) throw new Error("Token inválido");
+        return res.json();
+      })
       .then(data => setMessage(data.message))
       .catch(() => navigate("/login"));
   }, []);
 
   return (
     <div className="container mt-5">
-      <h2>Private Page</h2>
-      <p>{message || "Loading..."}</p>
+      <h2>Área Privada</h2>
+      <p>{message || "Cargando..."}</p>
     </div>
   );
 };
